@@ -16,11 +16,13 @@ classifiers = [
 ]
 dependencies = [
     "numpy",
-    "torch"
+    "torch",
+    "mmsegmentation",
+    "mmengine"
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/mmrgbx"
+Homepage = "https://github.com/w-copper/mmrgbx"
 
 
 [tool.setuptools.packages.find]
@@ -34,7 +36,3 @@ dev = [
     "black",
     "flake8"
 ]
-
-# Optional: Add entry points if needed
-# [project.scripts]
-# mmrgbx-cli = "mmrgbx.cli:main"
