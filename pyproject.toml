@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mmrgbx"
+version = "0.1.0"
+description = "A brief description of the mmrgbx package"
+authors = [
+    {name = "Wang Tong", email = "kingcopper@whu.edu.cn"}
+]
+requires-python = ">=3.6"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent"
+]
+dependencies = [
+    "numpy",
+    "torch"
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/mmrgbx"
+
+
+[tool.setuptools.packages.find]
+where = ["."] 
+exclude = ["configs*", "tools*", "demo*", ".vscode*", "refcode*"]
+
+# Optional: Add development dependencies
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
+    "flake8"
+]
+
+# Optional: Add entry points if needed
+# [project.scripts]
+# mmrgbx-cli = "mmrgbx.cli:main"
