@@ -1,7 +1,7 @@
 _base_ = [
     "../_base_/default_runtime.py",
     "../_base_/models/cmx-segformer.py",
-    "../_base_/datasets/potsdam_wops.py",
+    "../_base_/datasets/potsdam.py",
     "../_base_/schedule.py",
 ]
 model = dict(

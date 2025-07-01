@@ -1,7 +1,7 @@
 _base_ = [
     "../_base_/default_runtime.py",
     "../_base_/models/nestfusion.py",
-    "../_base_/datasets/vaihingen_wops.py",
+    "../_base_/datasets/vaihingen.py",
     "../_base_/schedule.py",
 ]
 model = dict(

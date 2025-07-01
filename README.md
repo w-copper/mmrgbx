@@ -103,7 +103,6 @@ python tools/test.py configs/cmfg/cmfg-potsdam.py checkpoints/model.pth --out re
 - **UPerNet-Swin**: 基于Swin Transformer的UPerNet
 - **PCPVT**: Pyramid Convolution and Vision Transformer
 
-> **TODO**: 各个模型的论文链接和详细说明正在整理中，将在后续版本中添加。
 
 ### 支持的数据集
 
@@ -144,7 +143,7 @@ mmrgbx/
 _base_ = [
     '../_base_/default_runtime.py',
     '../_base_/models/cmfg.py',
-    '../_base_/datasets/potsdam_wops.py',
+    '../_base_/datasets/potsdam.py',
     '../_base_/schedule.py',
 ]
 
@@ -158,6 +157,13 @@ model = dict(
     ),
 )
 ```
+
+## TODO:
+
+- [x] 完善文档
+- [x] 支持更多数据集
+- [x] 支持更多融合网络
+- [ ] 数据集预处理代码
 
 ## 🤝 贡献
 

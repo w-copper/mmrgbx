@@ -1,7 +1,7 @@
 _base_ = [
     "../_base_/default_runtime.py",
     "../_base_/models/dual-uniformer.py",
-    "../_base_/datasets/dfc23track1_wops.py",
+    "../_base_/datasets/dfc23track1.py",
     "../_base_/schedule.py",
 ]
 model = dict(
