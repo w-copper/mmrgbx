@@ -9,7 +9,7 @@ setup(
     author="Wang Tong",  # 包的作者
     author_email="kingcopper@whu.edu.cn",  # 作者的邮箱
     description="A brief description of the mmrgbx package",  # 包的简短描述
-    url="https://github.com/yourusername/mmrgbx",  # 包的项目主页，通常是 GitHub 仓库地址
+    url="https://github.com/w-copper/mmrgbx",  # 包的项目主页，通常是 GitHub 仓库地址
     packages=find_packages(
         exclude=("configs", "tools", "demo", ".vscode", "refcode")
     ),  # 自动查找包内的所有子包

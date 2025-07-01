@@ -22,7 +22,7 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/yourusername/mmrgbx.git
+git clone https://github.com/w-copper/mmrgbx.git
 cd mmrgbx
 
 # 安装依赖
@@ -183,7 +183,7 @@ model = dict(
 
 - 作者: Wang Tong
 - 邮箱: kingcopper@whu.edu.cn
-- 项目链接: [https://github.com/yourusername/mmrgbx](https://github.com/w-copper/mmrgbx)
+- 项目链接: [https://github.com/w-copper/mmrgbx](https://github.com/w-copper/mmrgbx)
 
 ## 🙏 致谢
 
@@ -206,6 +206,6 @@ model = dict(
   year={2024},
   publisher={GitHub},
   journal={GitHub repository},
-  howpublished={\url{https://github.com/yourusername/mmrgbx}}
+  howpublished={\url{https://github.com/w-copper/mmrgbx}}
 }
 ```
