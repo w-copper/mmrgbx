@@ -1153,7 +1153,7 @@ class FTransUnet(nn.Module):
         self.config = config
 
     def forward(self, x):
-        x, y = torch.split(x, 3, dim=1)
+        x, y = torch.split(x, 3, dim=1)[:2]
         x, y, attn_weights, features = self.transformer(x, y)  # (B, n_patch, hidden)
         x = x + y
         x = self.decoder(x, features)

@@ -1,14 +1,14 @@
 # dataset settings
-dataset_type = "YESegOptSarWithPs"
-data_root = "/YESeg-OPT-SAR"
-crop_size = (256, 256)
+dataset_type = "DFC23Track1WithPs"
+data_root = "/scratch/wangtong/DFC23_IEEE-DataPort/track1/train"
+crop_size = (512, 512)
 train_pipeline = [
     dict(type="MultiImgLoadImageFromFile"),
     dict(type="MultiImgLoadAnnotations", reduce_zero_label=False, with_ps=False),
     dict(type="AnyImageToRGB"),
     dict(
         type="MultiImgRandomResize",
-        scale=(256, 256),
+        scale=(512, 512),
         ratio_range=(0.5, 2.0),
         keep_ratio=True,
     ),
@@ -48,13 +48,13 @@ tta_pipeline = [
 
 
 train_dataloader = dict(
-    batch_size=4,
-    num_workers=4,
+    batch_size=1,
+    num_workers=1,
     persistent_workers=True,
     sampler=dict(type="InfiniteSampler", shuffle=True),
     dataset=dict(
-        with_ps=False,
         type=dataset_type,
+        with_ps=False,
         ann_file=data_root + "/train.txt",
         data_root=data_root,
         pipeline=train_pipeline,
@@ -62,7 +62,7 @@ train_dataloader = dict(
 )
 val_dataloader = dict(
     batch_size=1,
-    num_workers=4,
+    num_workers=1,
     persistent_workers=True,
     sampler=dict(type="DefaultSampler", shuffle=False),
     dataset=dict(

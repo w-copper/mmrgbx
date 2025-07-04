@@ -5,7 +5,7 @@ More details can be found at
 https://mmengine.readthedocs.io/en/latest/tutorials/registry.html.
 """
 
-from mmseg.registry import DATASETS as MMSEG_DATASETS
+from mmengine.registry import DATASETS as MMENGINE_DATASETS
 from mmseg.registry import MODELS as MMSEG_MODELS, TRANSFORMS as MMSEG_TRANSFORMS
 from mmengine.registry import Registry
 from mmseg.registry import (
@@ -30,7 +30,7 @@ from mmseg.registry import (
 )
 
 # manage data-related modules
-DATASETS = Registry("dataset", parent=MMSEG_DATASETS, locations=["mmrgbx.datasets"])
+DATASETS = Registry("dataset", parent=MMENGINE_DATASETS, locations=["mmrgbx.datasets"])
 TRANSFORMS = Registry(
     "transform", parent=MMSEG_TRANSFORMS, locations=["mmrgbx.datasets.transforms"]
 )

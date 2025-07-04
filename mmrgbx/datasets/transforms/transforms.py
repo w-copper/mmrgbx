@@ -1842,13 +1842,14 @@ class GridWavePS(BaseTransform):
             imgs[i + 1] = self.wave(
                 imgs[i + 1], amplitude1, amplitude2, frequency1, frequency2
             )
-            results[f"ps_seg_map_{i}"] = self.wave(
-                results[f"ps_seg_map_{i}"],
-                amplitude1,
-                amplitude2,
-                frequency1,
-                frequency2,
-            )
+            if "ps_seg_map_{i}" in results:
+                results[f"ps_seg_map_{i}"] = self.wave(
+                    results[f"ps_seg_map_{i}"],
+                    amplitude1,
+                    amplitude2,
+                    frequency1,
+                    frequency2,
+                )
 
         return results
 
@@ -1975,10 +1976,10 @@ class MultiImgAlbu(BaseTransform):
         imgs = results["img"]
         aug_dict["images"] = np.stack(imgs, axis=0)  # N H W C
         masks = []
-        seg_fields = results.get("seg_fields", [])
         masks.append(results["gt_seg_map"])
-        if len(seg_fields) > 1:
-            for i in range(len(seg_fields) - 1):
+        ps_count = results.get("ps_seg_map_count", 0)
+        if ps_count > 0:
+            for i in range(ps_count):
                 masks.append(results[f"ps_seg_map_{i}"])
         if masks:
             aug_dict["masks"] = np.stack(masks, axis=0)  # N H W
@@ -1987,8 +1988,8 @@ class MultiImgAlbu(BaseTransform):
 
         results["img"] = np.split(augmented["images"], indices_or_sections=2, axis=-1)
         results["gt_seg_map"] = augmented["masks"][0]
-        if len(seg_fields) > 1:
-            for i in range(len(seg_fields) - 1):
+        if ps_count > 0:
+            for i in range(ps_count):
                 results[f"ps_seg_map_{i}"] = augmented["masks"][i + 1]
         if self.update_pad_shape:
             h, w = augmented["masks"].shape[-2:]

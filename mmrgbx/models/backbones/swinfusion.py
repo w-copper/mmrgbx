@@ -1638,7 +1638,7 @@ class SwinFusion(nn.Module):
         return x
 
     def forward(self, x):
-        A, B = torch.split(x, self.in_chans, dim=1)
+        A, B = torch.split(x, self.in_chans, dim=1)[:2]
         # print("Initializing the model")
         x = A
         y = B

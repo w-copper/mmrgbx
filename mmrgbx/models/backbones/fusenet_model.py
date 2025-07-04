@@ -252,7 +252,7 @@ class FusenetModel(nn.Module):
         init_net(self)
 
     def forward(self, x):
-        rgb_inputs, depth_inputs = torch.split(x, 3, dim=1)
+        rgb_inputs, depth_inputs = torch.split(x, 3, dim=1)[:2]
         ########  DEPTH ENCODER  ########
         # Stage 1
         # x = self.conv11d(depth_inputs)

@@ -655,7 +655,7 @@ class CMXTransformer(nn.Module):
         return outs
 
     def forward(self, x):
-        x_rgb, x_e = torch.split(x, 3, dim=1)
+        x_rgb, x_e = torch.split(x, 3, dim=1)[:2]
         out = self.forward_features(x_rgb, x_e)
         return out
 

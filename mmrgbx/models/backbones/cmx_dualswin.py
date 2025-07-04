@@ -979,7 +979,7 @@ class DualSwinTransformer(nn.Module):
 
     def forward(self, x):
         """Forward function."""
-        x, x_d = torch.split(x, 3, dim=1)
+        x, x_d = torch.split(x, 3, dim=1)[:2]
         x = self.patch_embed(x)
         x_d = self.patch_embed_d(x_d)
 

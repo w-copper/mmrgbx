@@ -87,7 +87,7 @@ class DenseFuseModel(nn.Module):
         return [x_DB]
 
     def forward(self, x):
-        x1, x2 = torch.split(x, self.input_nc, dim=1)
+        x1, x2 = torch.split(x, self.input_nc, dim=1)[:2]
         en1 = self.encoder(x1)
         en2 = self.encoder(x2)
         en = self.fusion(en1, en2)

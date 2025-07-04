@@ -1,45 +1,41 @@
 # dataset settings
 dataset_type = "C2SegDataset"
-data_root = ""
+data_root = "/scratch/wangtong/C2SegClip"
+crop_size = (512, 512)
 crop_size = (512, 512)
 train_pipeline = [
-    dict(type="MultiImgLoadImageFromFile"),
-    dict(type="MultiImgLoadAnnotations", reduce_zero_label=True, with_ps=True),
-    dict(type="AnyImageToRGB"),
+    dict(type="LoadImageFromFile"),
+    dict(type="LoadAnnotations", reduce_zero_label=True),
     dict(
-        type="MultiImgRandomResize",
-        scale=(512, 512),
-        ratio_range=(0.5, 2.0),
-        keep_ratio=True,
+        type="RandomResize", scale=(512, 512), ratio_range=(0.5, 2.0), keep_ratio=True
     ),
-    dict(type="MultiImgRandomCrop", crop_size=crop_size, cat_max_ratio=0.75),
-    dict(type="MultiImgRandomFlip", prob=0.5),
-    dict(type="MultiImgPhotoMetricDistortion"),
-    dict(type="MultiImgPackSegInputs"),
+    dict(type="RandomCrop", crop_size=crop_size, cat_max_ratio=0.75),
+    dict(type="RandomFlip", prob=0.5),
+    dict(type="PhotoMetricDistortion"),
+    dict(type="PackSegInputs"),
 ]
 test_pipeline = [
-    dict(type="MultiImgLoadImageFromFile"),
-    dict(type="MultiImgLoadAnnotations", reduce_zero_label=True, with_ps=False),
-    dict(type="AnyImageToRGB"),
-    dict(type="MultiImgPackSegInputs"),
+    dict(type="LoadImageFromFile"),
+    dict(type="Resize", scale=(512, 512), keep_ratio=True),
+    # add loading annotation after ``Resize`` because ground truth
+    # does not need to do resize data transform
+    dict(type="LoadAnnotations", reduce_zero_label=True),
+    dict(type="PackSegInputs"),
 ]
+
 img_ratios = [0.75, 1.0, 1.25]
 tta_pipeline = [
-    dict(type="MultiImgLoadImageFromFile", backend_args=None),
-    dict(type="AnyImageToRGB"),
+    dict(type="LoadImageFromFile", backend_args=None),
     dict(
         type="TestTimeAug",
         transforms=[
+            [dict(type="Resize", scale_factor=r, keep_ratio=True) for r in img_ratios],
             [
-                dict(type="MultiImgResize", scale_factor=r, keep_ratio=True)
-                for r in img_ratios
+                dict(type="RandomFlip", prob=0.0, direction="horizontal"),
+                dict(type="RandomFlip", prob=1.0, direction="horizontal"),
             ],
-            [
-                dict(type="MultiImgRandomFlip", prob=0.0, direction="horizontal"),
-                dict(type="MultiImgRandomFlip", prob=1.0, direction="horizontal"),
-            ],
-            [dict(type="MultiImgLoadAnnotations")],
-            [dict(type="MultiImgPackSegInputs")],
+            [dict(type="LoadAnnotations")],
+            [dict(type="PackSegInputs")],
         ],
     ),
 ]
@@ -55,23 +51,10 @@ train_dataloader = dict(
         data_root=data_root,
         img_suffix="_msi.tif",
         seg_map_suffix="_label.tif",
-        other_suffixs=dict(
-            sar="_sar.tif",
-            hsi0="_hsi_0.tif",
-            hsi1="_hsi_1.tif",
-            sar_ps="_sar.png",
-            hsi0_ps="_hsi_0.png",
-            hsi1_ps="_hsi_1.png",
-        ),
+        reduce_zero_label=True,
         data_prefix=dict(
             seg_map_path="train",
             img_path="train",
-            sar="train",
-            hsi0="train",
-            hsi1="train",
-            sar_ps="trainps/sar",
-            hsi0_ps="trainps/hsi_0",
-            hsi1_ps="trainps/hsi_1",
         ),
         pipeline=train_pipeline,
     ),
@@ -85,26 +68,12 @@ val_dataloader = dict(
         type=dataset_type,
         data_root=data_root,
         img_suffix="_msi.tif",
+        reduce_zero_label=True,
         seg_map_suffix="_label.tif",
-        other_suffixs=dict(
-            sar="_sar.tif",
-            hsi0="_hsi_0.tif",
-            hsi1="_hsi_1.tif",
-            sar_ps="_sar.png",
-            hsi0_ps="_hsi_0.png",
-            hsi1_ps="_hsi_1.png",
-        ),
         data_prefix=dict(
             seg_map_path="val",
             img_path="val",
-            sar="val",
-            hsi0="val",
-            hsi1="val",
-            sar_ps="valps/sar",
-            hsi0_ps="valps/hsi_0",
-            hsi1_ps="valps/hsi_1",
         ),
-        with_ps=False,
         pipeline=test_pipeline,
     ),
 )

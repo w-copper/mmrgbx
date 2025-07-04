@@ -158,7 +158,7 @@ class U2DenseNet(nn.Module):
 
     def forward(self, x):
         # x = torch.cat((x_over, x_under), dim=1)
-        x = self.conv_1(x)
+        x = self.conv_1(x[:, : self.num_channels, :, :])
         x = self.dense_layers(x)
         x = self.sub(x)
         return [x]

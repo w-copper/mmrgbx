@@ -81,7 +81,7 @@ class ConvNormAct(nn.Module):
             dim_in, dim_out, kernel_size, stride, padding, dilation, groups, bias
         )
         self.norm = get_norm(norm_layer)(dim_out)
-        self.act = get_act(act_layer)(inplace=inplace)
+        self.act = get_act(act_layer)
         self.drop_path = DropPath(drop_path_rate) if drop_path_rate else nn.Identity()
 
     def forward(self, x):
@@ -135,7 +135,7 @@ class MSPatchEmb(nn.Module):
                         groups=c_group,
                     ),
                     get_norm(norm_layer)(emb_dim),
-                    get_act(act_layer)(emb_dim),
+                    get_act(act_layer)(),
                 )
             )
 
@@ -651,7 +651,7 @@ class DualEMO(BaseModule):
                 m.bias.data.zero_()
 
     def forward(self, x):
-        x1, x2 = torch.split(x, 3, 1)
+        x1, x2 = torch.split(x, 3, 1)[:2]
         outs = []
 
         for blk in self.stage0:

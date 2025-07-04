@@ -1,6 +1,6 @@
 # dataset settings
 dataset_type = "YESegOptSar"
-data_root = "/YESeg-OPT-SAR"
+data_root = "/scratch/wangtong/YESeg-OPT-SAR"
 crop_size = (256, 256)
 train_pipeline = [
     dict(type="LoadImageFromFile"),
@@ -24,25 +24,20 @@ test_pipeline = [
 
 img_ratios = [0.75, 1.0, 1.25]
 tta_pipeline = [
-    dict(type="MultiImgLoadImageFromFile", backend_args=None),
-    dict(type="AnyImageToRGB"),
+    dict(type="LoadImageFromFile", backend_args=None),
     dict(
         type="TestTimeAug",
         transforms=[
+            [dict(type="Resize", scale_factor=r, keep_ratio=True) for r in img_ratios],
             [
-                dict(type="MultiImgResize", scale_factor=r, keep_ratio=True)
-                for r in img_ratios
+                dict(type="RandomFlip", prob=0.0, direction="horizontal"),
+                dict(type="RandomFlip", prob=1.0, direction="horizontal"),
             ],
-            [
-                dict(type="MultiImgRandomFlip", prob=0.0, direction="horizontal"),
-                dict(type="MultiImgRandomFlip", prob=1.0, direction="horizontal"),
-            ],
-            [dict(type="MultiImgLoadAnnotations")],
-            [dict(type="MultiImgPackSegInputs")],
+            [dict(type="LoadAnnotations")],
+            [dict(type="PackSegInputs")],
         ],
     ),
 ]
-
 
 train_dataloader = dict(
     batch_size=4,
@@ -65,7 +60,6 @@ val_dataloader = dict(
         type=dataset_type,
         data_root=data_root,
         ann_file=data_root + "/val.txt",
-        with_ps=False,
         pipeline=test_pipeline,
     ),
 )

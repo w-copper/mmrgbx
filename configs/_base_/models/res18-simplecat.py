@@ -13,7 +13,6 @@ model = dict(
     type="SiamEncoderDecoder",
     data_preprocessor=data_preprocessor,
     pretrained=None,
-    score_weight=0.01,
     backbone=dict(
         type="ResNet",
         depth=18,
@@ -26,7 +25,7 @@ model = dict(
         necks=[
             dict(
                 type="SimpleFeatureFusionNeck",
-                in_channels=[128, 256, 512],
+                policy="concat",
                 out_indices=(0, 1, 2),
             ),
             dict(
@@ -46,9 +45,11 @@ model = dict(
         dropout_ratio=0.1,
         num_classes=13,
         align_corners=False,
-        loss_decode=dict(
-            type="mmseg.CrossEntropyLoss", use_sigmoid=False, loss_weight=1.0
-        ),
+        loss_decode=[
+            dict(type="mmseg.CrossEntropyLoss", use_sigmoid=False, loss_weight=1.0),
+            dict(type="mmseg.DiceLoss", loss_weight=0.4),
+            dict(type="mmseg.FocalLoss", loss_weight=1.0),
+        ],
     ),
     auxiliary_head=dict(
         type="mmseg.FCNHead",

@@ -1,6 +1,6 @@
 # dataset settings
 dataset_type = "mmseg.PotsdamDataset"
-data_root = "/PotsdamClip"
+data_root = "/scratch/wangtong/PotsdamClip"
 crop_size = (512, 512)
 train_pipeline = [
     dict(type="LoadImageFromFile"),
@@ -24,21 +24,17 @@ test_pipeline = [
 
 img_ratios = [0.75, 1.0, 1.25]
 tta_pipeline = [
-    dict(type="MultiImgLoadImageFromFile", backend_args=None),
-    dict(type="AnyImageToRGB"),
+    dict(type="LoadImageFromFile", backend_args=None),
     dict(
         type="TestTimeAug",
         transforms=[
+            [dict(type="Resize", scale_factor=r, keep_ratio=True) for r in img_ratios],
             [
-                dict(type="MultiImgResize", scale_factor=r, keep_ratio=True)
-                for r in img_ratios
+                dict(type="RandomFlip", prob=0.0, direction="horizontal"),
+                dict(type="RandomFlip", prob=1.0, direction="horizontal"),
             ],
-            [
-                dict(type="MultiImgRandomFlip", prob=0.0, direction="horizontal"),
-                dict(type="MultiImgRandomFlip", prob=1.0, direction="horizontal"),
-            ],
-            [dict(type="MultiImgLoadAnnotations")],
-            [dict(type="MultiImgPackSegInputs")],
+            [dict(type="LoadAnnotations")],
+            [dict(type="PackSegInputs")],
         ],
     ),
 ]
@@ -57,6 +53,7 @@ train_dataloader = dict(
             img_path="img_dir/train",
             seg_map_path="ann_dir/train",
         ),
+        reduce_zero_label=True,
         pipeline=train_pipeline,
     ),
 )
@@ -70,6 +67,7 @@ val_dataloader = dict(
         img_suffix=".png",
         data_root=data_root,
         data_prefix=dict(img_path="img_dir/val", seg_map_path="ann_dir/val"),
+        reduce_zero_label=True,
         pipeline=test_pipeline,
     ),
 )

@@ -1,6 +1,6 @@
 # dataset settings
 dataset_type = "PotsdamMultiClipPs"
-data_root = "/VaihingenClip"
+data_root = "/scratch/wangtong/PotsdamClip"
 crop_size = (512, 512)
 train_pipeline = [
     dict(type="MultiImgLoadImageFromFile"),
@@ -24,6 +24,7 @@ test_pipeline = [
     dict(type="AnyImageToRGB"),
     dict(type="MultiImgPackSegInputs"),
 ]
+
 img_ratios = [0.75, 1.0, 1.25]
 tta_pipeline = [
     dict(type="MultiImgLoadImageFromFile", backend_args=None),
@@ -44,6 +45,7 @@ tta_pipeline = [
         ],
     ),
 ]
+
 
 train_dataloader = dict(
     batch_size=4,

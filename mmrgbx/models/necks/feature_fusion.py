@@ -1,9 +1,6 @@
 # Copyright (c) Open-CD. All rights reserved.
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
 from mmengine.model import BaseModule
-from mmseg.utils import ConfigType
 from mmrgbx.registry import MODELS
 
 
@@ -22,22 +19,11 @@ class SimpleFeatureFusionNeck(BaseModule):
     def __init__(
         self,
         policy,
-        in_channels=None,
-        channels=None,
         out_indices=(0, 1, 2, 3),
-        add_normal=False,
-        norm_layer: ConfigType = None,
     ):
         super().__init__()
         self.policy = policy
-        self.in_channels = in_channels
-        self.channels = channels
         self.out_indices = out_indices
-        self.add_normal = add_normal
-        if norm_layer is not None:
-            self.norm_layer = MODELS.build(norm_layer)
-        else:
-            self.norm_layer = None
 
     def fusion(self, xs, policy):
         """Specify the form of feature fusion"""
@@ -51,8 +37,8 @@ class SimpleFeatureFusionNeck(BaseModule):
             x = torch.cat(xs, dim=1)
         elif policy == "sum":
             x = sum(xs)
-        if self.norm_layer is not None:
-            x = self.norm_layer(x)
+        else:
+            raise NotImplementedError()
         return x
 
     def forward(self, features_per_modals):

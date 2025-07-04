@@ -29,9 +29,11 @@ model = dict(
         dropout_ratio=0.1,
         num_classes=13,
         align_corners=False,
-        loss_decode=dict(
-            type="mmseg.CrossEntropyLoss", use_sigmoid=False, loss_weight=1.0
-        ),
+        loss_decode=[
+            dict(type="mmseg.CrossEntropyLoss", use_sigmoid=False, loss_weight=1.0),
+            dict(type="mmseg.DiceLoss", loss_weight=0.4),
+            dict(type="mmseg.FocalLoss", loss_weight=1.0),
+        ],
     ),
     auxiliary_head=dict(
         type="mmseg.FCNHead",

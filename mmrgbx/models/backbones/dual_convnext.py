@@ -326,7 +326,7 @@ class DualConvNeXt(nn.Module):
         return tuple(outs)
 
     def forward(self, x):
-        x1, x2 = torch.split(x, 3, dim=1)
+        x1, x2 = torch.split(x, 3, dim=1)[:2]
         x = self.forward_features(x1, x2)
 
         return x

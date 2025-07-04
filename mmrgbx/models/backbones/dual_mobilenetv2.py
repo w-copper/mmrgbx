@@ -138,7 +138,7 @@ class DualMobileNetV2(nn.Module):
                 m.bias.data.zero_()
 
     def forward(self, x):
-        x1, x2 = torch.split(x, 3, 1)
+        x1, x2 = torch.split(x, 3, 1)[:2]
         outs = []
 
         for block, aux_block, fcm, ffm in zip(

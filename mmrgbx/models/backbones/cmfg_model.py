@@ -154,7 +154,7 @@ class CMGFNet(nn.Module):
 
     def forward(self, x):
         # dsm_encoder
-        x_rgb, x_dsm = torch.split(x, 3, dim=1)
+        x_rgb, x_dsm = torch.split(x, 3, dim=1)[:2]
         y1 = self.enc_dsm1(x_dsm)  # bs * 64 * W/2 * H/2
         y1_side = self.side1_cross(y1)
 

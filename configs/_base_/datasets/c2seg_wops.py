@@ -1,6 +1,6 @@
 # dataset settings
-dataset_type = "PotsdamMultiClipPs"
-data_root = "/PotsdamClip"
+dataset_type = "C2SegWithPs"
+data_root = "/scratch/wangtong/C2SegClip"
 crop_size = (512, 512)
 train_pipeline = [
     dict(type="MultiImgLoadImageFromFile"),
@@ -15,7 +15,6 @@ train_pipeline = [
     dict(type="MultiImgRandomCrop", crop_size=crop_size, cat_max_ratio=0.75),
     dict(type="MultiImgRandomFlip", prob=0.5),
     dict(type="MultiImgPhotoMetricDistortion"),
-    dict(type="GridWavePS", amp=[3, 7], freq=[3, 15], randomize=True),
     dict(type="MultiImgPackSegInputs"),
 ]
 test_pipeline = [
@@ -24,7 +23,6 @@ test_pipeline = [
     dict(type="AnyImageToRGB"),
     dict(type="MultiImgPackSegInputs"),
 ]
-
 img_ratios = [0.75, 1.0, 1.25]
 tta_pipeline = [
     dict(type="MultiImgLoadImageFromFile", backend_args=None),
@@ -55,13 +53,23 @@ train_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
-        img_suffix=".png",
+        img_suffix="_msi.tif",
+        seg_map_suffix="_label.tif",
+        other_suffixs=dict(
+            sar="_sar.tif",
+            hsi0="_hsi_0.tif",
+            hsi1="_hsi_1.tif",
+        ),
         with_ps=False,
-        other_suffixs=dict(depth=".png"),
         data_prefix=dict(
-            img_path="img_dir/train",
-            seg_map_path="ann_dir/train",
-            depth="dep_dir/train",
+            seg_map_path="train",
+            img_path="train",
+            sar="train",
+            hsi0="train",
+            hsi1="train",
+            sar_ps="trainps/sar",
+            hsi0_ps="trainps/hsi_0",
+            hsi1_ps="trainps/hsi_1",
         ),
         pipeline=train_pipeline,
     ),
@@ -74,14 +82,24 @@ val_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
-        img_suffix=".png",
-        with_ps=False,
-        other_suffixs=dict(depth=".png"),
-        data_prefix=dict(
-            img_path="img_dir/val",
-            seg_map_path="ann_dir/val",
-            depth="dep_dir/val",
+        img_suffix="_msi.tif",
+        seg_map_suffix="_label.tif",
+        other_suffixs=dict(
+            sar="_sar.tif",
+            hsi0="_hsi_0.tif",
+            hsi1="_hsi_1.tif",
         ),
+        data_prefix=dict(
+            seg_map_path="val",
+            img_path="val",
+            sar="val",
+            hsi0="val",
+            hsi1="val",
+            sar_ps="valps/sar",
+            hsi0_ps="valps/hsi_0",
+            hsi1_ps="valps/hsi_1",
+        ),
+        with_ps=False,
         pipeline=test_pipeline,
     ),
 )

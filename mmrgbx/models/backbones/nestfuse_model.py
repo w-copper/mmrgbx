@@ -224,7 +224,7 @@ class NestFuseEncoder(nn.Module):
         return [x1_0, x2_0, x3_0, x4_0]
 
     def forward(self, x):
-        x1, x2 = torch.split(x, self.input_nc, dim=1)
+        x1, x2 = torch.split(x, self.input_nc, dim=1)[:2]
         en1 = self.encoder(x1)
         en2 = self.encoder(x2)
         f_en = self.fusion(en1, en2, "max")

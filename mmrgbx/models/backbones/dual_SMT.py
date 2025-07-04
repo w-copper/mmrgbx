@@ -369,6 +369,7 @@ class DualSMT(nn.Module):
             ca_num_heads=[4, 4, 4, -1],
             sa_num_heads=[-1, -1, 8, 16],
             mlp_ratios=[4, 4, 4, 2],
+            num_heads=[2, 4, 8, 16],
             qkv_bias=True,
             depths=[2, 2, 8, 1],
             ca_attentions=[1, 1, 1, 0],
@@ -380,6 +381,7 @@ class DualSMT(nn.Module):
             ca_num_heads=[4, 4, 4, -1],
             sa_num_heads=[-1, -1, 8, 16],
             mlp_ratios=[4, 4, 4, 2],
+            num_heads=[2, 4, 8, 16],
             qkv_bias=True,
             depths=[3, 4, 18, 2],
             ca_attentions=[1, 1, 1, 0],
@@ -391,6 +393,7 @@ class DualSMT(nn.Module):
             ca_num_heads=[4, 4, 4, -1],
             sa_num_heads=[-1, -1, 8, 16],
             mlp_ratios=[8, 6, 4, 2],
+            num_heads=[2, 4, 8, 16],
             qkv_bias=True,
             depths=[4, 6, 28, 2],
             ca_attentions=[1, 1, 1, 0],
@@ -617,7 +620,7 @@ class DualSMT(nn.Module):
         return tuple(outs)
 
     def forward(self, x):
-        x1, x2 = torch.split(x, 3, dim=1)
+        x1, x2 = torch.split(x, 3, dim=1)[:2]
         x = self.forward_features(x1, x2)
 
         return x
